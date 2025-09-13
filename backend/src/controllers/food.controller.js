@@ -6,25 +6,35 @@ const { v4: uuid } = require('uuid');
 
 
 async function createFood(req, res) {
-    if (!req.file) {
+    const videoFile = req.files?.video?.[0];
+    const thumbnailFile = req.files?.thumbnail?.[0];
+
+    if (!videoFile) {
         return res.status(400).json({
             message: "No video file uploaded."
         });
     }
+    if (!thumbnailFile) {
+        return res.status(400).json({
+            message: "No thumbnail file uploaded."
+        });
+    }
 
-    const fileUploadResult = await storageService.uploadFile(req.file.buffer, uuid());
+    const videoUploadResult = await storageService.uploadFile(videoFile.buffer, uuid());
+    const thumbnailUploadResult = await storageService.uploadFile(thumbnailFile.buffer, uuid());
 
     const foodItem = await foodModel.create({
         name: req.body.name,
         description: req.body.description,
-        video: fileUploadResult.url,
+        video: videoUploadResult.url,
+        thumbnail: thumbnailUploadResult.url,
         foodPartner: req.foodPartner._id
-    })
+    });
 
     res.status(201).json({
         message: "food created successfully",
         food: foodItem
-    })
+    });
 }
 
 async function getFoodItems(req, res) {

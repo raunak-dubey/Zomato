@@ -10,7 +10,10 @@ const upload = multer({
 
 router.post('/', 
     authMiddleware.authFoodPartnerMiddleware, 
-    upload.single("video"), 
+    upload.fields([
+        { name: "video", maxCount: 1 },
+        { name: "thumbnail", maxCount: 1 }
+    ]), 
     foodController.createFood
 );
 
