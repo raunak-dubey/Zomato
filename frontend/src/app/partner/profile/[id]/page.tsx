@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import axios from "axios";
+import BottomNav from "@/components/BottomNav";
 import Image from "next/image";
 
 interface FoodItem {
@@ -103,6 +104,7 @@ export default function ProfilePage() {
           </p>
         )}
       </section>
+      <BottomNav />
     </main>
   );
 }
